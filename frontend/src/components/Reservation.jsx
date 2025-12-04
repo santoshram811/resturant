@@ -15,18 +15,22 @@ const Reservation = () => {
 
   const handleReservation = async (e) => {
     e.preventDefault();
+
     try {
+      const API = import.meta.env.VITE_API_URL;
+
       const { data } = await axios.post(
-        'http://localhost:4000/api/reservation/send',
+        `${API}/api/reservation/send`,
         { firstName, lastName, email, phone },
         {
           headers: {
             'Content-Type': 'application/json'
-          },
-          withCredentials: true
+          }
         }
       );
+
       toast.success(data.message);
+
       setFirstName('');
       setLastName('');
       setPhone(0);
@@ -34,7 +38,7 @@ const Reservation = () => {
 
       navigate('/success');
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || 'Something went wrong');
     }
   };
 
